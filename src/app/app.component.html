@@ -1,0 +1,175 @@
+<div class="app-container">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-top">
+      <h1>{{ title }}</h1>
+      <div class="header-actions">
+        <button>
+          <span class="material-icons">notifications</span>
+        </button>
+        <button>
+          <span class="material-icons">settings</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-section">
+      <div class="search-field">
+        <span class="material-icons search-icon">place</span>
+        <input 
+            type="text" 
+            placeholder="D'où partez-vous ?" 
+            [(ngModel)]="fromLocation"
+            class="plain-input"
+          />
+
+        <div class="search-field">
+          <span class="material-icons search-icon">navigation</span>
+          <input 
+            type="text" 
+            placeholder="Où allez-vous ?" 
+            [(ngModel)]="toLocation"
+            class="plain-input"
+          />
+        </div>
+      <button class="search-button" (click)="searchRoute()">
+        <span class="material-icons">search</span>
+        Rechercher un itinéraire
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Tabs -->
+    <mat-tab-group>
+      <mat-tab label="Itinéraires">
+        <!-- Transport Types -->
+        <div class="section-card">
+          <div class="section-card-header">
+            <span class="section-title">Types de transport</span>
+          </div>
+          <div class="section-card-content">
+            <div class="transport-grid">
+              <div *ngFor="let transport of transportTypes" 
+                   class="transport-item {{ transport.color }}">
+                <span class="material-icons">{{ transport.icon }}</span>
+                <div class="transport-info">
+                  <p class="transport-name">{{ transport.name }}</p>
+                  <p class="transport-price">{{ transport.price }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Popular Routes -->
+        <mat-card class="section-card">
+          <mat-card-header>
+            <mat-card-title>Trajets populaires</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div *ngFor="let route of popularRoutes" class="route-item">
+              <div class="route-info">
+                <div class="route-path">
+                  <span class="route-location">{{ route.from }}</span>
+                  <mat-icon>trending_flat</mat-icon>
+                  <span class="route-location">{{ route.to }}</span>
+                </div>
+                <div class="route-details">
+                  <span class="route-detail">
+                    <mat-icon>schedule</mat-icon>
+                    {{ route.duration }}
+                  </span>
+                  <span class="route-detail">
+                    <mat-icon>payment</mat-icon>
+                    {{ route.price }}
+                  </span>
+                </div>
+              </div>
+              <button mat-icon-button (click)="addToFavorites(route)">
+                <mat-icon>favorite_border</mat-icon>
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+
+      <mat-tab label="À proximité">
+        <!-- Nearby Stops -->
+        <mat-card class="section-card">
+          <mat-card-header>
+            <mat-card-title>Arrêts à proximité</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div *ngFor="let stop of nearbyStops" class="nearby-item">
+              <div class="nearby-info">
+                <mat-icon class="location-icon">place</mat-icon>
+                <div>
+                  <p class="stop-name">{{ stop.name }}</p>
+                  <p class="stop-distance">{{ stop.distance }}</p>
+                </div>
+              </div>
+              <div class="transport-badges">
+                <mat-chip *ngFor="let transport of stop.transports">
+                  {{ transport }}
+                </mat-chip>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Live Updates -->
+        <mat-card class="section-card">
+          <mat-card-header>
+            <mat-card-title>Informations en temps réel</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div *ngFor="let update of liveUpdates" 
+                 class="live-update" 
+                 [ngClass]="'status-' + update.status">
+              <div class="status-indicator"></div>
+              <span>{{ update.message }}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+
+      <mat-tab label="Favoris">
+        <mat-card class="section-card">
+          <mat-card-header>
+            <mat-card-title>Trajets favoris</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="empty-state">
+              <mat-icon class="empty-icon">favorite_border</mat-icon>
+              <p>Aucun trajet favori pour le moment</p>
+              <p class="empty-subtitle">Ajoutez vos trajets fréquents ici</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <button mat-button class="nav-item">
+      <mat-icon>map</mat-icon>
+      <span>Carte</span>
+    </button>
+    <button mat-button class="nav-item">
+      <mat-icon>directions_bus</mat-icon>
+      <span>Transports</span>
+    </button>
+    <button mat-button class="nav-item">
+      <mat-icon>people</mat-icon>
+      <span>Communauté</span>
+    </button>
+    <button mat-button class="nav-item">
+      <mat-icon>star</mat-icon>
+      <span>Avis</span>
+    </button>
+  </div>
+</div>
